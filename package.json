@@ -1,13 +1,7 @@
 {
-<<<<<<< HEAD
   "name": "node-libcurl-impersonate",
   "version": "2.3.5",
   "description": "The fastest http(s) client (and much more) for Node.js - Node.js bindings for libcurl (curl-impersonate)",
-=======
-  "name": "node-libcurl",
-  "version": "3.0.0",
-  "description": "The fastest http(s) client (and much more) for Node.js - Node.js bindings for libcurl",
->>>>>>> 887949944dce38a19ee4ecbc5854aabe757e2a46
   "keywords": [
     "node-curl",
     "curl",

@@ -11,6 +11,7 @@
   - [Setup](#setup)
   - [Adding New libcurl Options](#adding-new-libcurl-options)
   - [Changing libcurl Version Used on Prebuilt Binaries for Windows](#changing-libcurl-version-used-on-prebuilt-binaries-for-windows)
+  - [Building Electron](#building-electron)
   - [Debugging with lldb](#debugging-with-lldb)
   - [Publishing New Releases](#publishing-new-releases)
     - [Semver Major / Minor / Patch](#semver-major--minor--patch)
@@ -73,6 +74,14 @@ In case you need to rebuild:
 $ yarn pregyp rebuild
 ```
 
+If on unix and using the build.sh scripts, you also need to provide the path to the curl config file:
+
+```bash
+npm_config_macos_universal_build=true \
+npm_config_curl_config_bin=~/deps/libcurl/build/x.y.z/bin/curl-config \
+yarn pregyp build --debug
+```
+
 If you have any issues with the build process, please refer to a [readme build troubleshooting section](https://github.com/JCMais/node-libcurl#important-notes-on-prebuilt-binaries--direct-installation).
 
 ### Adding New libcurl Options
@@ -95,6 +104,21 @@ If you want to include a new libcurl option on the addon, those are the basic st
 You will need to open a PR against the repository [`JCMais/curl-for-windows`](https://github.com/JCMais/curl-for-windows/) upgrading libcurl there.
 
 After that a new tag will be created on this repo, which we can them use on the file [`LIBCURL_VERSION_WIN_DEPS`](./LIBCURL_VERSION_WIN_DEPS).
+
+### Building Electron
+
+Sample command you could use from the root of this repository:
+
+```sh
+LIBCURL_RELEASE=7.78.0 PUBLISH_BINARY="false" ./scripts/ci/build.sh
+
+npm_config_curl_config_bin=~/deps/libcurl/build/7.78.0/bin/curl-config \
+ npm_config_curl_static_build=true \
+ npm_config_runtime=electron \
+ npm_config_target=21.2.0 \
+ npm_config_disturl=https://www.electronjs.org/headers \
+ yarn pregyp rebuild --debug
+```
 
 ### Debugging with lldb
 1. Install lldb

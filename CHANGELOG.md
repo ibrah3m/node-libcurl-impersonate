@@ -6,18 +6,45 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Breaking Change
-### Fixed
-### Added
-### Changed
-### Removed
+### Breaking Change  
+### Fixed  
+### Added  
+### Changed  
+### Removed  
+
+## [3.0.0] - 2022-11-17
+
+### Breaking Change  
+- The supported engines of Node.js were bumped to: `^14.14 || >=16`.
+- The supported versions of Electron now are: `v21`, `v20`, `v19`, `v18`, and `v17`.
+- The node-gyp package has been bumped, which means Python 3.0 is now required to build from source.
+- Minimum c++ version your compiler needs to support is now `c++17`.
+- The minimum macOS version is now Big Sur (11.6)
+- The prebuilt binaries on glibc Linux are now built on Ubuntu 20.04.
+- The prebuilt binaries on musl Linux (Alpine) are now built on Alpine 3.16.
+- The prebuilt binaries on Windows are now built with Visual Studio 2019.
+- There are no prebuilt binaries for NW.js anymore. This is because nw-gyp does not support Python 3 currently.
+- Option types for `CURLOPT_FTP_RESPONSE_TIMEOUT` has been removed, since libcurl 7.20 it was the same as `CURLOPT_SERVER_RESPONSE_TIMEOUT`.
+
+### Added  
+- Add support for the following options:
+  - [`PREREQFUNCTION`](https://curl.haxx.se/libcurl/c/CURLOPT_MAIL_RCPT_ALLLOWFAILS)
+  - [`MAXLIFETIME_CONN`](https://curl.haxx.se/libcurl/c/CURLOPT_MAXLIFETIME_CONN)
+  - [`PROTOCOLS_STR`](https://curl.haxx.se/libcurl/c/CURLOPT_PROTOCOLS_STR)
+  - [`REDIR_PROTOCOLS_STR`](https://curl.haxx.se/libcurl/c/CURLOPT_REDIR_PROTOCOLS_STR)
+- Add support for the following info options:
+  - [`CAINFO`](https://curl.se/libcurl/c/CURLINFO_CAINFO.html)
+  - [`CAPATH`](https://curl.se/libcurl/c/CURLINFO_CAPATH.html)
+
+### Changed  
+- Upgraded prebuild binaries to use libcurl 7.86.0. On Windows, OpenSSL 3.0.7 will be used.
 
 ## [2.3.4] - 2022-01-29
 
 ### Added
 - support `curl_blob` options [#300](https://github.com/JCMais/node-libcurl/issues/300) by @johnwchadwick 
 - added arm64 builds for macOS [#312](https://github.com/JCMais/node-libcurl/issues/312) by @johnwchadwick 
-- added most options that were missing up to libcurl version 7.79.1, including HSTS support.
+- added most options that were missing up xto libcurl version 7.79.1, including HSTS support.
 - added prebuilt binaries for Node.js v17.
 
 ### Changed
@@ -339,7 +366,8 @@ Special Thanks to [@koskokos2](https://github.com/koskokos2) for their contribut
 - Improved code style, started using prettier
 ## [1.2.0] - 2017-08-28
 
-[Unreleased]: https://github.com/JCMais/node-libcurl/compare/v2.3.4...HEAD
+[Unreleased]: https://github.com/JCMais/node-libcurl/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/JCMais/node-libcurl/compare/v2.3.4...v3.0.0
 [2.3.4]: https://github.com/JCMais/node-libcurl/compare/v2.3.3...v2.3.4
 [2.3.3]: https://github.com/JCMais/node-libcurl/compare/v2.3.2...v2.3.3
 [2.3.2]: https://github.com/JCMais/node-libcurl/compare/v2.3.1...v2.3.2

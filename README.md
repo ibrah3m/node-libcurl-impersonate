@@ -353,12 +353,12 @@ where `--target` is the current version of NW.js you are using
 
 > yarn
 ```bash
-npm_config_runtime=electron npm_config_target=$(yarn --silent electron --version) npm_config_disturl=https://www.electronjs.org/headers yarn add node-libcurl
+npm_config_runtime=electron npm_config_target=X.Y.Z npm_config_disturl=https://www.electronjs.org/headers yarn add node-libcurl
 ```
 
 > npm
 ```bash
-npm install node-libcurl --runtime=electron --target=$(yarn --silent electron --version) --disturl=https://www.electronjs.org/headers --save
+npm install node-libcurl --runtime=electron --target=X.Y.Z --disturl=https://www.electronjs.org/headers --save
 ```
 
 Where `--target` is the version of electron you are using, in our case, we are just using the version returned by the locally installed `electron` binary.
@@ -388,9 +388,10 @@ npm_config_node_libcurl_cpp_std=c++17 <...other args...> yarn add node-libcurl
 ### Building on Linux
 
 To build the addon on linux based systems you must have:
-- gcc >= 4.8
+- gcc >= 7
 - libcurl dev files
-- python 2.7
+- python >= 3
+- OS that is not past their EOL.
 
 If you are on a debian based system, you can get those by running:
 ```bash
@@ -404,7 +405,7 @@ In case you want some examples check the CI configuration files ([`.travis.yml`]
 ### Building on macOS
 
 On macOS you must have:
-- macOS >= 10.12 (Sierra)
+- macOS >= 11.6 (Big Sur)
 - Xcode Command Line Tools
 
 You can check if you have Xcode Command Line Tools be running:

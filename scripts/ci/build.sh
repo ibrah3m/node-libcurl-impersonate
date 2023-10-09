@@ -19,6 +19,11 @@ export FORCE_REBUILD=$FORCE_REBUILD
 
 MACOS_UNIVERSAL_BUILD=${MACOS_UNIVERSAL_BUILD:-}
 
+echo "Checking python version"
+python -V || true
+echo "Checking python3 version"
+python3 -V || true
+
 if [ "$(uname)" == "Darwin" ]; then
   # Default to universal build, if possible.
   if [ -z "$MACOS_UNIVERSAL_BUILD" ]; then
@@ -32,7 +37,7 @@ if [ "$(uname)" == "Darwin" ]; then
     export MACOS_ARCH_FLAGS=""
   fi
 
-  export MACOSX_DEPLOYMENT_TARGET=10.12
+  export MACOSX_DEPLOYMENT_TARGET=11.6
   export MACOS_TARGET_FLAGS="-mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
 
   export CFLAGS="$MACOS_TARGET_FLAGS $MACOS_ARCH_FLAGS"
@@ -51,6 +56,7 @@ function cat_slower() {
   # [ "$CI" == "true" ] && (cat $1 | grep "^[^|]" | perl -pe 'select undef,undef,undef,0.0033333333') || true
 }
 
+CI=${CI:-}
 PREFIX_DIR=${PREFIX_DIR:-$HOME}
 STOP_ON_INSTALL=${STOP_ON_INSTALL:-false}
 RUN_PREGYP_CLEAN=${RUN_PREGYP_CLEAN:-true}
@@ -67,6 +73,40 @@ GSS_LIBRARY=${GSS_LIBRARY:-kerberos}
 LOGS_FOLDER=${BUILD_LOGS_FOLDER:-./logs}
 
 mkdir -p $LOGS_FOLDER
+
+# on gh actions it is including this file for some reason: /usr/local/include/nghttp2/nghttp2.h:55:
+# so we are making sure we remove those so they do not mess with our build
+if [[ -n "$CI" && "$(uname)" == "Darwin" ]]; then
+  echo "include folder:"
+  ls -al /usr/local/include
+  echo "lib folder:"
+  ls -al /usr/local/lib
+  # delete all libraries we are building on this file from /usr/local/lib
+  rm -rf /usr/local/include/{nghttp2,openssl,curl}
+  rm -rf     /usr/local/lib/{nghttp2,openssl,curl}
+fi
+
+# check for some common missing deps
+if [ "$(uname)" == "Darwin" ]; then
+  if ! command -v cmake &>/dev/null; then
+    (>&2 echo "Could not find cmake, we need it to build some dependencies (such as brotli)")
+    (>&2 echo "You can get it by installing the cmake package:")
+    (>&2 echo "brew install cmake")
+    exit 1
+  fi
+  if ! command -v autoreconf &>/dev/null; then
+    (>&2 echo "Could not find autoreconf, we need it to build some dependencies (such as libssh2)")
+    (>&2 echo "You can get it by installing the autoconf package:")
+    (>&2 echo "brew install autoconf")
+    exit 1
+  fi
+  if ! command -v aclocal &>/dev/null; then
+    (>&2 echo "Could not find aclocal, we need it to build some dependencies (such as libssh2)")
+    (>&2 echo "You can get it by installing the automake package:")
+    (>&2 echo "brew install automake")
+    exit 1
+  fi
+fi
 
 # The following two, libunistring and libidn2, are only necessary if building libcurl >= 7.53
 # However we are going to build then anyway, they are not that slow to build.
@@ -130,7 +170,7 @@ unset KERNEL_BITS
 # Build nghttp2
 ###################
 # nghttp2 version must match Node.js one
-NGHTTP2_RELEASE=${NGHTTP2_RELEASE:-$(node -e "console.log(process.versions.nghttp2)")}
+export NGHTTP2_RELEASE=${NGHTTP2_RELEASE:-$(node -e "console.log(process.versions.nghttp2)")}
 NGHTTP2_DEST_FOLDER=$PREFIX_DIR/deps/nghttp2
 echo "Building nghttp2 v$NGHTTP2_RELEASE"
 ./scripts/ci/build-nghttp2.sh $NGHTTP2_RELEASE $NGHTTP2_DEST_FOLDER >$LOGS_FOLDER/build-nghttp2.log 2>&1
@@ -288,7 +328,7 @@ has_display=$(xdpyinfo -display $DISPLAY >/dev/null 2>&1 && echo "true" || echo 
 
 if [ -n "$ELECTRON_VERSION" ]; then
   runtime='electron'
-  dist_url='https://atom.io/download/electron'
+  dist_url='https://electronjs.org/headers'
   target="$ELECTRON_VERSION"
   
   # enabled always temporarily

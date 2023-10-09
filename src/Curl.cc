@@ -181,6 +181,11 @@ const std::vector<CurlConstant> curlOptionInteger = {
 
     {"MAXCONNECTS", CURLOPT_MAXCONNECTS},
     {"MAXFILESIZE", CURLOPT_MAXFILESIZE},
+
+#if NODE_LIBCURL_VER_GE(7, 80, 0)
+    {"MAXLIFETIME_CONN", CURLOPT_MAXLIFETIME_CONN},
+#endif
+
     {"MAXREDIRS", CURLOPT_MAXREDIRS},
     {"NETRC", CURLOPT_NETRC},
     {"NEW_DIRECTORY_PERMS", CURLOPT_NEW_DIRECTORY_PERMS},
@@ -222,6 +227,8 @@ const std::vector<CurlConstant> curlOptionInteger = {
     {"RTSP_REQUEST", CURLOPT_RTSP_REQUEST},
     {"RTSP_SERVER_CSEQ", CURLOPT_RTSP_SERVER_CSEQ},
     {"SASL_IR", CURLOPT_SASL_IR},
+
+    {"SERVER_RESPONSE_TIMEOUT", CURLOPT_SERVER_RESPONSE_TIMEOUT},
 
 #if NODE_LIBCURL_VER_GE(7, 55, 0)
     {"SOCKS5_AUTH", CURLOPT_SOCKS5_AUTH},
@@ -371,6 +378,10 @@ const std::vector<CurlConstant> curlOptionString = {
     {"PRE_PROXY", CURLOPT_PRE_PROXY},
 #endif
 
+#if NODE_LIBCURL_VER_GE(7, 85, 0)
+    {"PROTOCOLS_STR", CURLOPT_PROTOCOLS_STR},
+#endif
+
     {"PROXY", CURLOPT_PROXY},
 
 #if NODE_LIBCURL_VER_GE(7, 52, 0)
@@ -407,6 +418,11 @@ const std::vector<CurlConstant> curlOptionString = {
     {"QUOTE", CURLOPT_QUOTE},
     {"RANDOM_FILE", CURLOPT_RANDOM_FILE},
     {"RANGE", CURLOPT_RANGE},
+
+#if NODE_LIBCURL_VER_GE(7, 85, 0)
+    {"REDIR_PROTOCOLS_STR", CURLOPT_REDIR_PROTOCOLS_STR},
+#endif
+
     {"REFERER", CURLOPT_REFERER},
 
 #if NODE_LIBCURL_VER_GE(7, 55, 0)
@@ -475,6 +491,10 @@ const std::vector<CurlConstant> curlOptionFunction = {
 #if NODE_LIBCURL_VER_GE(7, 74, 0)
     {"HSTSREADFUNCTION", CURLOPT_HSTSREADFUNCTION},
     {"HSTSWRITEFUNCTION", CURLOPT_HSTSWRITEFUNCTION},
+#endif
+
+#if NODE_LIBCURL_VER_GE(7, 80, 0)
+    {"PREREQFUNCTION", CURLOPT_PREREQFUNCTION},
 #endif
 
     {"PROGRESSFUNCTION", CURLOPT_PROGRESSFUNCTION},
@@ -579,6 +599,11 @@ const std::vector<CurlConstant> curlInfoNotImplemented = {
 };
 
 const std::vector<CurlConstant> curlInfoString = {
+#if NODE_LIBCURL_VER_GE(7, 84, 0)
+    {"CAINFO", CURLINFO_CAINFO},
+    {"CAPATH", CURLINFO_CAPATH},
+#endif
+
     {"CONTENT_TYPE", CURLINFO_CONTENT_TYPE},
     {"EFFECTIVE_URL", CURLINFO_EFFECTIVE_URL},
 
